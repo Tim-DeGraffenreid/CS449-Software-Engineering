@@ -186,5 +186,86 @@ public class BoardTest {
         char result = instance.getCell(x, y);
         assertEquals(expResult, result);
     }
+    @Test
+    public void testSimpleBluePlayerWin(){
+        System.out.println("Simple Blue Player Win");
+        Board instance = new Board();
+        instance.setBoardSize(5);
+        instance.initializeGame();
+        instance.setRedLetter('S');
+        instance.setBlueLetter('S');
+        int move1 = instance.makeMove(0, 0);
+        int move2 = instance.makeMove(0, 1);
+        instance.setRedLetter('O');
+        int move3 = instance.makeMove(0,2);
+        int move4 = instance.makeMove(0, 3);
+        int result = instance.getWinner();
+        int expResult = 1;
+        assertEquals(expResult, result);
+    }
+    @Test
+    public void testSimpleDraw(){
+        System.out.println("Simple Draw");
+        Board instance = new Board();
+        instance.setBoardSize(5);
+        instance.initializeGame();
+        instance.setRedLetter('S');
+        instance.setBlueLetter('S');
+
+        for(int i = 0; i < 5; i++){
+            for(int j = 0; i < 5; i++){
+                int move = instance.makeMove(i, j);
+            }
+        }
+        
+        int result = instance.getWinner();
+        int expResult = -1;
+        assertEquals(expResult, result);
+    }
+    @Test 
+    public void testGeneralRedWin(){
+        System.out.println("General Red Win");
+        Board instance = new Board();
+        instance.setBoardSize(4);
+        instance.initializeGame();
+        instance.setRedLetter('S');
+        instance.setBlueLetter('O');
+        int move1 = instance.makeMove(0, 0);
+        int move2 = instance.makeMove(0, 1);
+        int move3 = instance.makeMove(0, 2);
+        
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; i < 4; i++){
+                int move = instance.makeMove(i, j);
+            }
+        }
+        
+        int result = instance.getWinner();
+        int expResult = 0;
+        assertEquals(expResult, result);       
+        
+    }
+
+    @Test 
+    public void testGeneralDraw(){
+        System.out.println("General Draw");
+        Board instance = new Board();
+        instance.setBoardSize(4);
+        instance.initializeGame();
+        instance.setRedLetter('S');
+        instance.setBlueLetter('S');
+ 
+        
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; i < 4; i++){
+                int move = instance.makeMove(i, j);
+            }
+        }
+        
+        int result = instance.getWinner();
+        int expResult = -1;
+        assertEquals(expResult, result);       
+        
+    }    
     
 }

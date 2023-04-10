@@ -17,7 +17,9 @@ public class Board {
     private int isInProgress = 0;// 0 not in progress, 1 in progress
     private char redLetter = 'S';  
     private char blueLetter = 'S'; 
-    private int turn = 0 ;      //0 represents red, 1 represents blue
+    protected int turn = 0 ;      //0 represents red, 1 represents blue
+    protected int winner = -1; //-1 no winner declared
+    private int isGameOver = 0;
     
     public Board(){
         System.out.println("Board Created");
@@ -52,7 +54,15 @@ public class Board {
               letter = getBlueLetter();
           }  
           setCell(y,x,letter);
-          changeTurn();
+          if(this.isSOS(y,x) == 1){
+              this.setWinner();
+              this.setIsGameOver();
+          }else if(this.isFull()==1){
+              this.setIsGameOver();
+          }else{
+              changeTurn(); 
+          }
+ 
           return 1;
         }
         return 0;
@@ -102,4 +112,121 @@ public class Board {
             System.out.println();
         }
     }
+    
+    public int getWinner(){
+        return this.winner;
+    }
+    
+    public void setWinner(){
+        this.winner = this.turn;
+    }
+    public int isFull(){
+        for (char[] boardGrid1 : boardGrid) {
+            for (int j = 0; j < boardGrid1.length; j++) {
+               if(boardGrid1[j] == '~'){
+                   return 0;
+               }
+            }
+        }
+        return 1;
+    }
+    public int isSOS(int x,int y){
+      
+        if(y >= 2){//Straight up SOS
+            if(this.getCell(x, y)== 'S' && this.getCell(x, y-1) == 'O' && this.getCell(x, y-2)=='S'){
+                return 1;
+            }
+        }
+       
+        if((this.boardSize - y -1) >= 2){ //Straight down SOS
+             if(this.getCell(x, y)== 'S' && this.getCell(x, y + 1) == 'O' && this.getCell(x, y + 2)=='S'){
+                return 1;
+            }  
+        }
+       
+        if(x >= 2){//Straight left SOS
+            if(this.getCell(x, y)== 'S' && this.getCell(x - 1, y) == 'O' && this.getCell(x - 2, y)=='S'){
+                return 1;
+            }
+        }
+       
+        if((this.boardSize - x - 1) >= 2){ //Straight right SOS
+             if(this.getCell(x, y)== 'S' && this.getCell(x + 1, y) == 'O' && this.getCell(x + 2, y)=='S'){
+                return 1;
+            }  
+        } 
+       
+        if(y >= 1 &&((this.boardSize - y -1) >= 1)){//Straight up & down SOS O
+            if(this.getCell(x, y)== 'O' && this.getCell(x, y-1) == 'S' && this.getCell(x, y+1)=='S'){
+                return 1;
+            }
+        }
+
+          
+        if(x >= 1 && ((this.boardSize - x -1) >= 1)){//Straight left and right SOS O
+            if(this.getCell(x, y)== 'O' && this.getCell(x - 1, y) == 'S' && this.getCell(x +1, y)=='S'){
+                return 1;
+            }
+        }
+
+       
+        if(x >= 2 && y >= 2){//diagonal left upper
+             if(this.getCell(x, y)== 'S' && this.getCell(x - 1, y - 1) == 'O' && this.getCell(x - 2, y - 2)=='S'){
+                return 1;
+            }  
+        }
+         
+        if(x >= 2 && (this.boardSize - y -1) >= 2){//diagonal left lower
+             if(this.getCell(x, y)== 'S' && this.getCell(x - 1, y + 1) == 'O' && this.getCell(x - 2, y + 2)=='S'){
+                return 1;
+            }  
+        } 
+        
+        if((this.boardSize - x -1) >= 2 && y >= 2){//diagonal right upper
+             if(this.getCell(x, y)== 'S' && this.getCell(x + 1, y - 1) == 'O' && this.getCell(x + 2, y - 2)=='S'){
+                return 1;
+            }  
+        }   
+
+        if((this.boardSize - x -1) >= 2 && (this.boardSize - y -1) >= 2){//diagonal right lower
+             if(this.getCell(x, y)== 'S' && this.getCell(x + 1, y + 1) == 'O' && this.getCell(x + 2, y + 2)=='S'){
+                return 1;
+            }  
+        }  
+     
+        if(x >= 1 && y >= 1){//diagonal  minor O
+             if(this.getCell(x, y)== 'O' && this.getCell(x - 1, y - 1) == 'S' && this.getCell(x + 1, y + 1)=='S'){
+                return 1;
+            }  
+        }          
+ 
+        if((y >= 1) && (x <= 2) && (x >=1)){//diagonal  major O
+             if(this.getCell(x, y)== 'O' && this.getCell(x + 1, y - 1) == 'S' && this.getCell(x - 1, y + 1)=='S'){
+                return 1;
+            }  
+        } 
+          /* */
+        return 0;
+    }
+    
+    public int isGameOver(int isSOS){
+        
+        if(isSOS == 1){
+            this.setWinner();
+            return 1;
+        }
+        if(this.isFull() == 1){
+            return 1;
+        }
+        return 0;
+    }
+
+   public void setIsGameOver(){
+       this.isGameOver = 1;
+   }
+   
+   public int getIsGameOver(){
+       return this.isGameOver;
+   }
+   
 }

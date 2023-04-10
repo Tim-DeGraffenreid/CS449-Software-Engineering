@@ -293,6 +293,8 @@ public class GameFrame extends javax.swing.JFrame {
             int x = (int) java.lang.Math.floor(evt.getX()/cellSize);
             int y = (int) java.lang.Math.floor(evt.getY()/cellSize);  
             
+            System.out.println("x: " + x);
+            System.out.println("y: " + y);     
             
             char letter = 0;
             if(this.board.getTurn() == 0){
@@ -313,7 +315,15 @@ public class GameFrame extends javax.swing.JFrame {
                     this.messageLabel.setText("Current Turn: Blue");
                 }
                 // ToDO: create paintGrid() to call after each move
-                
+                if(this.board.getIsGameOver()==1){
+                    if(this.board.getWinner() == 0){
+                        this.messageLabel.setText("Red Has Won The Game");
+                    }else if(this.board.getWinner() == 1){
+                        this.messageLabel.setText("Blue Has Won The Game");
+                    }else{
+                        this.messageLabel.setText("The Game was a draw."); 
+                    }                  
+                }
                 jPanel1.repaint();
                 this.board.printBoardToConsole();
                 
@@ -340,7 +350,10 @@ public class GameFrame extends javax.swing.JFrame {
                 if("Simple Game".equals(button.getText())){
                     this.board.setGameType(0);      //Sets game to Simple 
                 }else{
-                    this.board.setGameType(1);      //Sets game to General   
+                    board = new sos.GeneralBoard();
+                    board.setBoardSize(boardSize);
+                    System.out.println("GB:" +board.getBoardSize());
+                   // this.board.setGameType(1);      //Sets game to General   
                 }
             }
         }        
