@@ -15,7 +15,7 @@ public class GeneralComputerGame extends GeneralBoard {
     @Override
     public int makeMove(int x, int y){
         
-        
+        String player;
         if((this.getComputerPlayer()==0 && this.getTurn() == 0) || (this.getComputerPlayer() == 1 && this.getTurn() == 1) || this.getComputerPlayer() == 2){
             
           int move[] = this.getComputerMove();
@@ -59,6 +59,15 @@ public class GeneralComputerGame extends GeneralBoard {
               this.setWinner();
               this.setIsGameOver();
           }
+          
+          if(this.getTurn() == 0){
+              
+              player = "Red";
+          }else{
+              
+              player = "Blue";
+          }    
+          this.writeToFile(player + ";" + "("+ x+ ","+ y+")"+";"+letter);          
           this.changeTurn();
           return 1;
         }

@@ -14,7 +14,7 @@ public class SimpleComputerGame extends Board {
 
     @Override
     public int makeMove(int x, int y){
-        
+        String player;
         if((this.getComputerPlayer()==0 && this.getTurn() == 0) || (this.getComputerPlayer() == 1 && this.getTurn() == 1) || this.getComputerPlayer() == 2){
             
           int move[] = this.getComputerMove();
@@ -43,6 +43,12 @@ public class SimpleComputerGame extends Board {
               letter = getBlueLetter();
           }  
           setCell(y,x,letter);
+          if(this.getTurn() == 0){
+              player = "Red";
+          }else{
+              player = "Blue";
+          }           
+          this.writeToFile(player + ";" + "("+ x+ ","+ y+")"+";"+letter);           
           if(this.isSOS(y,x) == 1){
               this.setWinner();
               this.setIsGameOver();

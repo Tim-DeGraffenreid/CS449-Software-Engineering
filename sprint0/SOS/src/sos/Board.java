@@ -5,8 +5,12 @@
 package sos;
 
 import java.util.Stack;
-
-
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -25,9 +29,12 @@ public class Board {
     int computerPlayer = -1;//0-red is computer, 1-blue is computer, 2-both are computer
     Stack<Integer> xHistory = new Stack<>();
     Stack<Integer> yHistory = new Stack<>();
+    String timestamp;
     
     public Board(){
-        System.out.println("Board Created");
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+        this.timestamp = now.format(formatter);
     }
     public void setHistory(int x, int y){
         this.xHistory.addElement(x);
@@ -60,15 +67,20 @@ public class Board {
     public int getGameType(){
         return gameType;
     }
+    
     public int makeMove(int x, int y){
+        String player;
         if(this.isEmpty(y, x) == 0){
           char letter;
           if(this.getTurn() == 0){
               letter = getRedLetter();
+              player = "Red";
           }else{
               letter = getBlueLetter();
+              player = "Blue";
           }  
           setCell(y,x,letter);
+          
           if(this.isSOS(y,x) == 1){
               this.setWinner();
               this.setIsGameOver();
@@ -77,7 +89,8 @@ public class Board {
           }else{
               changeTurn(); 
           }
- 
+          
+          this.writeToFile(player + ";" + "("+ x+ ","+ y+")"+";"+letter);
           return 1;
         }
         return 0;
@@ -155,6 +168,11 @@ public class Board {
         }
         return 1;
     }
+    
+    public char[][] getBoard() {
+        return boardGrid;
+    }
+    
     public int isSOS(int x,int y){
         int bound = this.getBoardSize() - 1;
         if(y >= 2){//Straight up SOS
@@ -233,6 +251,7 @@ public class Board {
       
         return 0;
     }
+
     
     public int isGameOver(int isSOS){
         
@@ -261,5 +280,22 @@ public class Board {
     public void setComputerPlayer(int computerPlayer){
         this.computerPlayer = computerPlayer;
     }
-   
+    public void writeToFile(String message) {
+         String fileName = this.timestamp+".txt";
+         try {
+            // check if the file already exists and has data
+            boolean fileExistsWithData = Files.exists(Paths.get(fileName)) && Files.size(Paths.get(fileName)) > 0;
+
+            FileWriter writer = new FileWriter(fileName, true); 
+            if (fileExistsWithData) {
+                writer.write("\n"); 
+            }
+            writer.write(message);
+            writer.close();
+            System.out.println("Successfully wrote to file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to the file.");
+           
+        }
+    }
 }

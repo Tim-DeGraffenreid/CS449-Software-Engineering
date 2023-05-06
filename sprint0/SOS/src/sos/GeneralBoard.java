@@ -42,6 +42,7 @@ public class GeneralBoard extends Board {
     
     @Override
     public int makeMove(int x, int y){
+        String player;
         if(this.isEmpty(y, x) == 0){
           char letter;
           if(this.getTurn() == 0){
@@ -65,6 +66,13 @@ public class GeneralBoard extends Board {
               this.setWinner();
               this.setIsGameOver();
           }
+          
+          if(this.getTurn() == 0){
+              player = "Red";
+          }else{
+              player = "Blue";
+          }           
+          this.writeToFile(player + ";" + "("+ x+ ","+ y+")"+";"+letter);          
           this.changeTurn();
           return 1;
         }
